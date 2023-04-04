@@ -1,25 +1,32 @@
-import React from 'react';
+import {MouseEvent, useCallback, useState} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import List from './components/List';
+import AddListItem from './components/AddListItem';
 
 function App() {
+
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [items, setItems] = useState<string[]>([]);
+
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+      setButtonClicked(!buttonClicked);  
+  };
+
+  const addToList = useCallback((item: string) => {
+    console.log(`Added item: ${item}`)
+    setItems(prev => [...prev,item]);
+  },[items]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className='container'>
+      <h1>Todo List - React Ts</h1>
+      <button onClick={handleClick}>+ Add Todo</button>
+        {buttonClicked? <AddListItem addToList={addToList}/> : null}
+        <List items={items} />
+      </div>
+    </>
   );
 }
 
